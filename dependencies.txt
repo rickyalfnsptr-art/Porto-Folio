@@ -1,0 +1,43 @@
+==================================================
+PORTO-FOLIO - DEPENDENCIES & ENVIRONMENT LIST
+==================================================
+
+[1] PRODUCTION DEPENDENCIES (Core Packages)
+--------------------------------------------------
+next@16.2.7
+react@19.2.4
+react-dom@19.2.4
+lucide-react@^1.17.0
+
+[2] DEVELOPMENT DEPENDENCIES (Build & Styling)
+--------------------------------------------------
+@tailwindcss/postcss@^4
+tailwindcss@^4
+typescript@^5
+@types/node@^20
+@types/react@^19
+@types/react-dom@^19
+eslint@^9
+eslint-config-next@16.2.7
+
+[3] INSTALLATION COMMAND FOR LOCAL & VERCEL
+--------------------------------------------------
+npm install next@16.2.7 react@19.2.4 react-dom@19.2.4 lucide-react@^1.17.0
+npm install -D @tailwindcss/postcss@^4 tailwindcss@^4 typescript@^5 @types/node@^20 @types/react@^19 @types/react-dom@^19 eslint@^9 eslint-config-next@16.2.7
+
+[4] ENVIRONMENT VARIABLES (Vercel & Local)
+--------------------------------------------------
+NEXT_TELEMETRY_DISABLED=1
+NODE_ENV=production
+NPM_CONFIG_LOGLEVEL=warn
+NEXT_PUBLIC_SITE_URL=https://porto-ricky.vercel.app
+NEXT_PUBLIC_APP_NAME="Ricky Alfian Saputra - Portfolio"
+NEXT_PUBLIC_AUTHOR="Ricky Alfian Saputra"
+CONTACT_EMAIL_RECEIVER=rickyalfian751@gmail.com
+
+[5] BUILD SCRIPTS
+--------------------------------------------------
+Development Server : npm run dev
+Production Build   : npm run build
+Start Server       : npm run start
+Linting Code       : npm run lint
