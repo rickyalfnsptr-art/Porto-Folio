@@ -2,96 +2,25 @@
 
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
+import ProjectTvModal from "@/components/ProjectTvModal";
+import { projectsData, Project } from "@/lib/data";
 import {
   GitBranch, Briefcase, Mail, Phone, ExternalLink, MapPin,
   Code2, BookOpen, Award, Users, Layers, Clock, ChevronRight,
   Braces, Server, BarChart2, Smartphone, Wifi, Lock, Globe,
-  Star, ArrowRight, Database
+  Star, ArrowRight, Database, Tv, Sparkles, Filter, Factory
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const GlobeCanvas = dynamic(() => import("@/components/GlobeCanvas"), { ssr: false });
 
 const skills = [
-  { icon: <Code2 size={20} />, label: "Frontend", items: ["HTML", "CSS", "React", "Next.js"] },
-  { icon: <Server size={20} />, label: "Backend", items: ["PHP", "Python", "Java", "Dart"] },
-  { icon: <Database size={20} />, label: "Database", items: ["MySQL", "PostgreSQL", "Firebase"] },
-  { icon: <BarChart2 size={20} />, label: "Data", items: ["Data Analysis", "NLP", "Data Science"] },
-  { icon: <Wifi size={20} />, label: "IoT", items: ["Arduino", "Sensor", "Mikrokontroler"] },
-  { icon: <Globe size={20} />, label: "Deploy", items: ["Vercel", "Git", "GitHub"] },
-];
-
-const projects = [
-  {
-    title: "Absensi Seminar",
-    desc: "Sistem absensi seminar real-time berbasis Firebase Database dengan fitur export Excel dan manajemen sertifikat.",
-    tags: ["Firebase", "React", "Vercel"],
-    link: "https://absensi-seminar.vercel.app/",
-    icon: <Users size={24} />,
-    color: "#e8673a",
-    bg: "linear-gradient(135deg, #fff5f0 0%, #ffe0d0 100%)",
-    soon: false,
-  },
-  {
-    title: "Landing Page SEO",
-    desc: "Landing page teroptimasi SEO untuk kampanye digital marketing dengan performa tinggi.",
-    tags: ["Next.js", "SEO", "Marketing"],
-    link: "https://project-uas-digital-marketing-klmpk.vercel.app/",
-    icon: <Globe size={24} />,
-    color: "#3a7be8",
-    bg: "linear-gradient(135deg, #f0f5ff 0%, #d0e0ff 100%)",
-    soon: false,
-  },
-  {
-    title: "NLP Project",
-    desc: "Aplikasi Natural Language Processing untuk analisis teks berbahasa Indonesia dengan visualisasi interaktif.",
-    tags: ["Python", "NLP", "ML"],
-    link: "https://project-uas-nlp.vercel.app/",
-    icon: <Braces size={24} />,
-    color: "#5a3ae8",
-    bg: "linear-gradient(135deg, #f5f0ff 0%, #ddd0ff 100%)",
-    soon: false,
-  },
-  {
-    title: "MCGOO Guide",
-    desc: "Landing page panduan Magic Chest untuk game mobile dengan UI yang menarik dan informatif.",
-    tags: ["React", "Tailwind", "Landing Page"],
-    link: "https://magicchestguide.vercel.app/",
-    icon: <Star size={24} />,
-    color: "#e8a03a",
-    bg: "linear-gradient(135deg, #fffbf0 0%, #ffe8c0 100%)",
-    soon: false,
-  },
-  {
-    title: "Website Berita Live",
-    desc: "Portal berita dengan konten dinamis, kategori berita, dan fitur pencarian artikel real-time.",
-    tags: ["React", "REST API", "Frontend"],
-    link: "https://fe-berita-mandiri-seal.vercel.app/",
-    icon: <BookOpen size={24} />,
-    color: "#22c55e",
-    bg: "linear-gradient(135deg, #f0fff5 0%, #c8ffd8 100%)",
-    soon: false,
-  },
-  {
-    title: "Data Science Dashboard",
-    desc: "Dashboard analisis data dengan visualisasi chart interaktif dan exploratory data analysis.",
-    tags: ["Python", "Data Science", "Visualization"],
-    link: "https://data-science-xi.vercel.app/",
-    icon: <BarChart2 size={24} />,
-    color: "#e83a7b",
-    bg: "linear-gradient(135deg, #fff0f5 0%, #ffc8dc 100%)",
-    soon: false,
-  },
-  {
-    title: "WargaRT02 App",
-    desc: "Aplikasi manajemen warga RT 02 dengan fitur iuran, pengumuman, dan data kependudukan berbasis IoT.",
-    tags: ["Coming Soon", "Flutter", "Firebase"],
-    link: "#",
-    icon: <Smartphone size={24} />,
-    color: "#94a3b8",
-    bg: "linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%)",
-    soon: true,
-  },
+  { icon: <Code2 size={20} />, label: "Frontend", items: ["HTML", "CSS", "React", "Next.js", "Tailwind CSS", "TypeScript"] },
+  { icon: <Server size={20} />, label: "Backend", items: ["PHP", "Python", "Java", "Dart", "REST API", "Node.js"] },
+  { icon: <Factory size={20} />, label: "Industrial & IoT", items: ["Predictive Maint.", "Preventive Maint.", "Andon Quality", "CAPEX", "ESP32"] },
+  { icon: <Database size={20} />, label: "Database", items: ["MySQL", "PostgreSQL", "Firebase", "Supabase", "Redis"] },
+  { icon: <BarChart2 size={20} />, label: "Data & AI", items: ["Data Analysis", "NLP", "Machine Learning", "Pandas", "Scikit-Learn"] },
+  { icon: <Globe size={20} />, label: "Deploy & Cloud", items: ["Vercel", "Git", "GitHub", "Docker", "Postman"] },
 ];
 
 const publications = [
@@ -124,19 +53,33 @@ function Reveal({ children, delay = 0, style }: { children: React.ReactNode; del
 function SectionHeader({ label, title, sub }: { label: string; title: string; sub?: string }) {
   const { ref, visible } = useReveal();
   return (
-    <div ref={ref} style={{ marginBottom: 52, textAlign: "center", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.6s, transform 0.6s" }}>
+    <div ref={ref} style={{ marginBottom: 44, textAlign: "center", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.6s, transform 0.6s" }}>
       <span className="section-label">{label}</span>
       <h2 style={{ fontFamily: "var(--font-dm-serif)", fontSize: "clamp(1.9rem,4vw,2.7rem)", margin: "10px 0 12px", lineHeight: 1.15 }}>{title}</h2>
-      {sub && <p style={{ color: "var(--fg-muted)", maxWidth: 540, margin: "0 auto", fontSize: "1.02rem", lineHeight: 1.65 }}>{sub}</p>}
+      {sub && <p style={{ color: "var(--fg-muted)", maxWidth: 580, margin: "0 auto", fontSize: "1.02rem", lineHeight: 1.65 }}>{sub}</p>}
     </div>
   );
 }
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [activeTvProject, setActiveTvProject] = useState<Project | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
+
   useEffect(() => setMounted(true), []);
 
-  const ticker = ["HTML","CSS","React","Next.js","PHP","Python","MySQL","Firebase","PostgreSQL","NLP","IoT","Data Science","Tailwind","Git","Vercel","Flutter","Java","Dart"];
+  const ticker = [
+    "Predictive Maintenance", "Preventive Maintenance", "Andon Quality", "CAPEX System",
+    "Customer Claims 8D", "React", "Next.js", "Python", "IoT ESP32", "Machine Learning",
+    "FastAPI", "PostgreSQL", "Firebase", "NLP Bahasa", "Data Science", "Tailwind CSS", "Vercel"
+  ];
+
+  const categories = ["Semua", "Industrial & IoT", "Enterprise & Finance", "AI & Data Science", "Web & Mobile"];
+
+  const filteredProjects = selectedCategory === "Semua"
+    ? projectsData
+    : projectsData.filter(p => p.category === selectedCategory);
+
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -333,49 +276,318 @@ export default function Home() {
 
       {/* PROJECTS */}
       <section id="projects" style={{ padding: "90px 24px", maxWidth: 1100, margin: "0 auto" }}>
-        <SectionHeader label="Projects" title="Karya & Project" sub="Kumpulan project yang telah saya bangun, mulai dari web app, data science, hingga NLP." />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 22 }}>
-          {projects.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.07}>
-              <div className="card" style={{ overflow: "hidden", height: "100%", display: "flex", flexDirection: "column" }}>
-                {/* Visual */}
-                <div style={{ background: p.bg, height: 148, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
-                  {p.soon ? (
-                    <div style={{ textAlign: "center" }}>
-                      <div style={{ width: 60, height: 60, borderRadius: 14, background: "#e8e8ec", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", color: "#94a3b8" }}>{p.icon}</div>
-                      <span style={{ background: "#e2e8f0", color: "#64748b", padding: "3px 12px", borderRadius: 100, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase" }}>Coming Soon</span>
-                    </div>
-                  ) : (
-                    <>
-                      <div style={{ width: 64, height: 64, borderRadius: 16, background: p.color + "22", display: "flex", alignItems: "center", justifyContent: "center", color: p.color }}>{p.icon}</div>
-                      <div style={{ position: "absolute", right: -16, bottom: -16, width: 90, height: 90, borderRadius: "50%", background: p.color + "18" }} />
-                      <div style={{ position: "absolute", left: -10, top: -10, width: 55, height: 55, borderRadius: "50%", background: p.color + "12" }} />
-                    </>
-                  )}
-                </div>
-                <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
-                  <h3 style={{ margin: "0 0 8px", fontSize: "1.05rem", fontWeight: 700 }}>{p.title}</h3>
-                  <p style={{ color: "var(--fg-muted)", fontSize: "0.88rem", lineHeight: 1.62, margin: "0 0 14px", flex: 1 }}>{p.desc}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14 }}>
-                    {p.tags.map(t => <span key={t} className="tag">{t}</span>)}
+        <SectionHeader
+          label="Karya & Rekayasa Sistem"
+          title="Featured Projects & TV Portal"
+          sub="Klik kartu project apa saja untuk menyalakan visual retro TV dan menyelam masuk ke detail arsitektur, metrik performa, dan live demo."
+        />
+
+
+        {/* Category Filters */}
+        <Reveal delay={0.05}>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+              justifyContent: "center",
+              marginBottom: 36,
+            }}
+          >
+            {categories.map(cat => {
+              const active = selectedCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  style={{
+                    background: active ? "var(--accent)" : "var(--bg-card)",
+                    color: active ? "#ffffff" : "var(--fg-muted)",
+                    border: `1px solid ${active ? "var(--accent)" : "var(--border)"}`,
+                    padding: "8px 18px",
+                    borderRadius: 100,
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    boxShadow: active ? "0 4px 16px rgba(232, 103, 58, 0.3)" : "none",
+                  }}
+                  onMouseEnter={e => {
+                    if (!active) {
+                      e.currentTarget.style.borderColor = "var(--accent)";
+                      e.currentTarget.style.color = "var(--accent)";
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!active) {
+                      e.currentTarget.style.borderColor = "var(--border)";
+                      e.currentTarget.style.color = "var(--fg-muted)";
+                    }
+                  }}
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        </Reveal>
+
+        {/* Project Cards Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))", gap: 24 }}>
+          {filteredProjects.map((p, i) => (
+            <Reveal key={p.id} delay={(i % 6) * 0.06}>
+              <div
+                className="card"
+                onClick={() => setActiveTvProject(p)}
+                style={{
+                  overflow: "hidden",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  cursor: "pointer",
+                  position: "relative",
+                  transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = p.color;
+                  e.currentTarget.style.boxShadow = `0 16px 40px rgba(0,0,0,0.12), 0 0 24px ${p.color}33`;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.boxShadow = "0 4px 24px var(--shadow)";
+                }}
+              >
+                {/* Visual Thumbnail with High Resolution Image */}
+                <div
+                  style={{
+                    position: "relative",
+                    height: 190,
+                    overflow: "hidden",
+                    background: "#0f172a",
+                  }}
+                >
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="project-card-image"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      objectPosition: "center",
+                    }}
+                    loading="lazy"
+                  />
+
+                  {/* Dark gradient for text contrast */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.7) 100%)",
+                      pointerEvents: "none",
+                    }}
+                  />
+
+                  {/* Category Pill Tag (Top Left) */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 12,
+                      left: 12,
+                      background: "rgba(15, 23, 42, 0.8)",
+                      backdropFilter: "blur(8px)",
+                      color: "#f8fafc",
+                      padding: "4px 10px",
+                      borderRadius: 100,
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.03em",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      zIndex: 2,
+                    }}
+                  >
+                    {p.category}
                   </div>
-                  {!p.soon ? (
-                    <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: p.color, fontWeight: 600, fontSize: "0.86rem", textDecoration: "none", transition: "gap 0.2s" }}
-                      onMouseEnter={e => (e.currentTarget.style.gap = "10px")} onMouseLeave={e => (e.currentTarget.style.gap = "6px")}>
-                      Lihat Project <ExternalLink size={13} />
-                    </a>
-                  ) : (
-                    <span style={{ color: "#94a3b8", fontWeight: 600, fontSize: "0.86rem" }}>🚧 Dalam Pengembangan</span>
-                  )}
+
+                  {/* Retro TV Portal Pill (Top Right) */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 12,
+                      right: 12,
+                      background: "rgba(232, 103, 58, 0.9)",
+                      color: "#ffffff",
+                      padding: "4px 10px",
+                      borderRadius: 100,
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 5,
+                      boxShadow: "0 0 12px rgba(232, 103, 58, 0.5)",
+                      zIndex: 2,
+                    }}
+                  >
+                    <Tv size={12} />
+                    <span>TV Portal</span>
+                  </div>
+
+                  {/* Hover Callout overlay: "Nyalakan TV & Masuk" */}
+                  <div
+                    className="card-hover-overlay"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "rgba(10, 10, 20, 0.72)",
+                      backdropFilter: "blur(3px)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      opacity: 0,
+                      transition: "opacity 0.25s ease",
+                      zIndex: 5,
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = "0")}
+                  >
+                    <div
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: "50%",
+                        background: p.color,
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: `0 0 20px ${p.color}`,
+                      }}
+                    >
+                      <Tv size={20} />
+                    </div>
+                    <span
+                      style={{
+                        color: "white",
+                        fontWeight: 700,
+                        fontSize: "0.88rem",
+                        letterSpacing: "0.03em",
+                      }}
+                    >
+                      Nyalakan TV & Masuk ⚡
+                    </span>
+                    <span style={{ color: "#94a3b8", fontSize: "0.74rem" }}>
+                      Klik untuk membuka portal detail
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8, marginBottom: 6 }}>
+                    <h3 style={{ margin: 0, fontSize: "1.12rem", fontWeight: 700, color: "var(--fg)" }}>
+                      {p.title}
+                    </h3>
+                  </div>
+
+                  <p style={{ color: "var(--fg-muted)", fontSize: "0.87rem", lineHeight: 1.62, margin: "0 0 16px", flex: 1 }}>
+                    {p.desc}
+                  </p>
+
+                  {/* Tags */}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
+                    {p.tags.slice(0, 4).map(t => (
+                      <span key={t} className="tag" style={{ fontSize: "0.75rem", padding: "3px 10px" }}>
+                        {t}
+                      </span>
+                    ))}
+                    {p.tags.length > 4 && (
+                      <span className="tag" style={{ fontSize: "0.75rem", padding: "3px 8px" }}>
+                        +{p.tags.length - 4}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Card Actions Footer */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderTop: "1px solid var(--border)",
+                      paddingTop: 14,
+                      marginTop: "auto",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        color: p.color,
+                        fontWeight: 700,
+                        fontSize: "0.86rem",
+                      }}
+                    >
+                      <Tv size={14} />
+                      <span>Masuk Portal TV</span>
+                    </div>
+
+                    {p.link && p.link !== "#" && (
+                      <a
+                        href={p.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={e => e.stopPropagation()}
+                        title="Buka Live Demo langsung di tab baru"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          fontSize: "0.78rem",
+                          color: "var(--fg-muted)",
+                          textDecoration: "none",
+                          padding: "4px 8px",
+                          borderRadius: 6,
+                          background: "var(--bg)",
+                          border: "1px solid var(--border)",
+                          transition: "all 0.2s",
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.color = "var(--accent)";
+                          e.currentTarget.style.borderColor = "var(--accent)";
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.color = "var(--fg-muted)";
+                          e.currentTarget.style.borderColor = "var(--border)";
+                        }}
+                      >
+                        Demo <ExternalLink size={11} />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </Reveal>
           ))}
         </div>
-        <div style={{ textAlign: "center", marginTop: 40 }}>
-          <a href="https://github.com/ricky1211" target="_blank" rel="noopener noreferrer" className="btn-outline"><GitBranch size={16} /> Semua di GitHub</a>
+
+        <div style={{ textAlign: "center", marginTop: 44 }}>
+          <a href="https://github.com/ricky1211" target="_blank" rel="noopener noreferrer" className="btn-outline">
+            <GitBranch size={16} /> Jelajahi Seluruh Project di GitHub
+          </a>
         </div>
       </section>
+
+      {/* TV RETRO PORTAL MODAL */}
+      <ProjectTvModal
+        project={activeTvProject}
+        onClose={() => setActiveTvProject(null)}
+        onSelectProject={setActiveTvProject}
+        allProjects={projectsData}
+      />
 
       {/* EXPERIENCE */}
       <div style={{ background: "var(--bg-card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
